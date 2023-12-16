@@ -1,3 +1,6 @@
+from classes import BaseHashMapManager
+
+
 class Component:
     STATUS = {
         "FAULTY": -1,
@@ -34,6 +37,10 @@ class Component:
     @property
     def processes_history(self) -> list[str]:
         return self.__processes_history
+
+    @processes_history.setter
+    def processes_history(self, new_history: list[str]) -> None:
+        self.__processes_history = new_history
     
     def __str__(self):
         return f"{self.id} - Component - Status: {self.current_status}"
@@ -42,10 +49,10 @@ class Component:
         return f"{self.id} - Component - Status: {self.current_status}"
     
 
-class ProductionLine:
+class ProductionLine(BaseHashMapManager):
     def __init__(self, name: str) -> None:
+        super().__init__()
         self.__name = name
-        self.__components_table = {}
 
     @property
     def name(self) -> str:
@@ -54,26 +61,6 @@ class ProductionLine:
     @name.setter
     def name(self, new_name: str) -> None:
         self.__name = new_name
-
-    def add_component(self, component: Component) -> None:
-        self.__components_table[component.id] = component
-
-    def find_component(self, id: int) -> Component:
-        try:
-            return self.__components_table[id]
-        except KeyError:
-            return None
-
-    def update_component(self, id: int, new_status: int, new_location: str, new_process: str) -> bool:
-        component = self.find_component(id)
-        if component:
-            component.current_status = new_status
-            component.location = new_location
-            component.processes_history.append(new_process)
-            return True
-        else:
-            return False
-
 
 
 first_component = Component(1, "Sector A", Component.STATUS["OFF"])
@@ -85,10 +72,12 @@ third_component.processes_history.append("Warm metal plate for bolt production")
 third_component.processes_history.append("Overheat")
 
 production_line = ProductionLine("Playstation 5")
-production_line.add_component(first_component)
-production_line.add_component(second_component)
-production_line.add_component(third_component)
+production_line.add_item(first_component.id, first_component)
+production_line.add_item(second_component.id, second_component)
+production_line.add_item(third_component.id, third_component)
 
-print(production_line.find_component(2))
-production_line.update_component(third_component.id, Component.STATUS["WORKING"], "Sector C", "Gamepad button production")
-print(production_line.find_component(third_component.id))
+print(production_line.find_item(2))
+print(third_component.processes_history)
+production_line.update_item(third_component.id, current_status=Component.STATUS["WORKING"], location="Sector C", processes_history="A new line")
+print(production_line.find_item(third_component.id))
+print(production_line.find_item(third_component.id).processes_history)

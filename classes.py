@@ -71,3 +71,31 @@ class PressureSensor(Sensor):
     
     def generate_sensor_id(self):
         return self.ID_PARTIAL + "-" + uuid4().hex
+
+
+class BaseHashMapManager:
+    def __init__(self):
+        self.__items_hash_map = {}
+    
+    def add_item(self, id, item):
+        self.__items_hash_map[id] = item
+    
+    def find_item(self, id):
+        try:
+            return self.__items_hash_map[id]
+        except KeyError:
+            return None
+    
+    def update_item(self, id, **kwargs):
+        item = self.find_item(id)
+        if item:
+            for key, value in kwargs.items():
+                if hasattr(item, key):
+                    if isinstance(getattr(item, key), list):
+                        new_list = getattr(item, key).copy()
+                        new_list.append(value)
+                        setattr(item, key, new_list)
+                    else:
+                        setattr(item, key, value)
+            return True
+        return False
