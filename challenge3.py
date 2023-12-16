@@ -10,10 +10,6 @@ class Sensor:
     def id(self) -> int:
         return self.__id
 
-    @id.setter
-    def _id(self, value) -> None:
-        self.__id = value
-
     @property
     def read_value(self) -> float:
         return self.__read_value

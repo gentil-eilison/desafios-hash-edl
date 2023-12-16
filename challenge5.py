@@ -21,10 +21,6 @@ class Product:
     def production_order_number(self) -> int:
         return self.__production_order_number
 
-    @production_order_number.setter
-    def production_order_number(self, value)  -> None:
-        self.__production_order_number = value
-
     @property
     def order_status(self)  -> int:
         return self.__order_status

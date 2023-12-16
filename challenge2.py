@@ -17,10 +17,6 @@ class Provider:
     @property
     def code(self) -> int:
         return self.__code
-    
-    @code.setter
-    def code(self, new_code: int) -> None:
-        self.__code = new_code
 
 
 class Item:
@@ -33,10 +29,6 @@ class Item:
     @property
     def code(self):
         return self.__code
-
-    @code.setter
-    def code(self, value):
-        self.__code = value
 
     @property
     def in_stock_amount(self):
